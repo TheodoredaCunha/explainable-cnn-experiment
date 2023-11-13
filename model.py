@@ -39,5 +39,3 @@ class CNNModel(nn.Module):
         output = self.out(x)
         return output, x    # return x for visualizationv
 
-model = CNNModel(10)
-

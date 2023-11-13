@@ -8,7 +8,7 @@ from model import CNNModel
 import torch.optim as optim
 from torch.autograd import Variable
 
-model = CNNModel(num_classes = 10, num_layers = 2, first_out_channel = 16)
+model = CNNModel(num_classes = 10, num_layers = 3, first_out_channels = 16)
 
 batch_size = 4
 trainset = torchvision.datasets.MNIST(root='./data/', train=True, download=True, transform=transforms.ToTensor())
@@ -17,11 +17,11 @@ testset = torchvision.datasets.MNIST(root='./data/', train=False, download=True,
 
 loaders = {
     'train' : DataLoader(trainset, 
-                         batch_size=100, 
+                         batch_size= 40, 
                         shuffle=True),
     
     'test'  : DataLoader(testset, 
-                        batch_size=100, 
+                        batch_size= 40, 
                         shuffle=True)
 }
 
