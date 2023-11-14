@@ -33,7 +33,6 @@ class CNNModel(nn.Module):
         for i in range(len(self.conv_layers)):
             x = self.conv_layers[i](x)
         
-        # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
         x = x.view(x.size(0), -1)       
         output = self.out(x)
         return output, x    # return x for visualization
