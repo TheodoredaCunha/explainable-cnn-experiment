@@ -8,30 +8,7 @@ from model import CNNModel
 import torch.optim as optim
 from torch.autograd import Variable
 
-model = CNNModel(num_classes = 10, num_layers = 3, first_out_channels = 16)
-
-batch_size = 4
-trainset = torchvision.datasets.MNIST(root='./data/', train=True, download=True, transform=transforms.ToTensor())
-
-testset = torchvision.datasets.MNIST(root='./data/', train=False, download=True, transform=transforms.ToTensor())
-
-loaders = {
-    'train' : DataLoader(trainset, 
-                         batch_size= 40, 
-                        shuffle=True),
-    
-    'test'  : DataLoader(testset, 
-                        batch_size= 40, 
-                        shuffle=True)
-}
-
-
-
-loss_func = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-
-num_epochs = 2
-def train(num_epochs, cnn, loaders):
+def train(num_epochs, cnn, loaders, optimizer, loss_func):
     
     cnn.train()
         
@@ -40,7 +17,6 @@ def train(num_epochs, cnn, loaders):
         
     for epoch in range(num_epochs):
         for i, (images, labels) in enumerate(loaders['train']):
-            
             # gives batch data, normalize x when iterate train_loader
             b_x = Variable(images)   # batch x
             b_y = Variable(labels)   # batch y
@@ -55,14 +31,7 @@ def train(num_epochs, cnn, loaders):
             # apply gradients             
             optimizer.step()                
             
-            if (i+1) % 100 == 0:
+            if (i+1) % 2000 == 0:
                 print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                        .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
-               
-        
-        pass
-    
-    
-    pass
-train(num_epochs, model, loaders)
         
