@@ -1,6 +1,5 @@
 import torch.nn as nn
-import torch.nn.functional as F
-
+import math
 
 class CNNModel(nn.Module):
     def __init__(self, num_classes, num_layers, first_out_channels):
@@ -8,7 +7,9 @@ class CNNModel(nn.Module):
         list_of_seq = []
         self.prev_channels = 1
         self.first_out_channels = first_out_channels
+        count = 0
         for i in range(num_layers):
+            count += 1
             seq = nn.Sequential(
                 nn.Conv2d(
                     in_channels = self.prev_channels,              
@@ -20,14 +21,14 @@ class CNNModel(nn.Module):
                 nn.ReLU(),                      
                 nn.MaxPool2d(kernel_size=2), 
             )
+            
             list_of_seq.append(seq)
             self.prev_channels = self.first_out_channels
             self.first_out_channels *= 2
 
         self.conv_layers = nn.ModuleList(list_of_seq)
-
         # fully connected layer, output 10 classes
-        self.out = nn.Linear(self.prev_channels * 28//(2 ** num_layers) * 28//(2 ** num_layers), num_classes)
+        self.out = nn.Linear(self.prev_channels * math.floor(28/(2 ** count)) * math.floor(28/(2 ** count)), num_classes)
 
     def forward(self, x):
         for i in range(len(self.conv_layers)):

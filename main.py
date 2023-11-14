@@ -8,7 +8,7 @@ from dataset import data
 
 loaders = data(batch_size = 4)
 
-for i in range(1, 2):
+for i in range(3, 4):
     print(f"Current number of layers: {i}")
     model = CNNModel(num_classes = 10, num_layers = i, first_out_channels = 16)
     summary(model, (1, 28, 28))

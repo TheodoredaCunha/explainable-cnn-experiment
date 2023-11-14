@@ -1,11 +1,3 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torchvision
-from torch.utils.data import DataLoader
-from torchvision.transforms import transforms
-from model import CNNModel
-import torch.optim as optim
 from torch.autograd import Variable
 
 def train(num_epochs, cnn, loaders, optimizer, loss_func):
