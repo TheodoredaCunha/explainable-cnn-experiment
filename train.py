@@ -1,6 +1,6 @@
 from torch.autograd import Variable
 
-def train(num_epochs, cnn, loaders, optimizer, loss_func):
+def train(num_epochs, cnn, loaders, optimizer, loss_func, device, print_progress = False):
     
     cnn.train()
         
@@ -10,8 +10,8 @@ def train(num_epochs, cnn, loaders, optimizer, loss_func):
     for epoch in range(num_epochs):
         for i, (images, labels) in enumerate(loaders['train']):
             # gives batch data, normalize x when iterate train_loader
-            b_x = Variable(images)   # batch x
-            b_y = Variable(labels)   # batch y
+            b_x = Variable(images).to(device)   # batch x
+            b_y = Variable(labels).to(device)    # batch y
             output = cnn(b_x)[0]               
             loss = loss_func(output, b_y)
             
@@ -23,7 +23,8 @@ def train(num_epochs, cnn, loaders, optimizer, loss_func):
             # apply gradients             
             optimizer.step()                
             
-            if (i+1) % 2000 == 0:
-                print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-                       .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
+            if print_progress:
+                if (i+1) % 2000 == 0:
+                    print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
+                        .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
         
