@@ -9,19 +9,19 @@ from test import test
 from dataset import data
 from explainer import explain
 
-loaders = data(batch_size = 4)
+loaders = data(batch_size = 128)
 device = torch.device("cpu")
-for i in range(1, 2):
-    print(f"Current number of layers: {i}")
-    model = CNNModel(num_classes = 10, num_layers = i, first_out_channels = 16)
-    summary(model, (1, 28, 28))
-    loss_func = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-    num_epochs = 2
+model = CNNModel()
+summary(model, (1, 28, 28))
+loss_func = nn.functional.nll_loss
+optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-    train(num_epochs, model, loaders, optimizer, loss_func, device, print_progress=False)
-    test(model, loaders, device)
+num_epochs = [2, 4, 6, 10, 15]
+for i in num_epochs:
+    print(f'training with {i} epochs')
+    train(i, model, loaders, optimizer, loss_func, device, print_progress=True)
+    test(model, loaders, loss_func, device)
     explain(model, loaders, device)
 
     

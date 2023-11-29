@@ -4,11 +4,16 @@ import numpy as np
 
 def explain(cnn, loader, device):
 
-    background, _ = next(iter(loader['test']))
-    test_images = next(iter(loader['test']))
-    e = shap.DeepExplainer(cnn.to(device), background.to(device))
-    shap_values = e.shap_values(test_images.to(device))
+    images, _ = next(iter(loader['test']))
+    print(len(images))
+    background = images[:100]
+    test_images = images[100:103]
+    print(test_images)
+    e = shap.DeepExplainer(cnn, background)
+    shap_values = e.shap_values(test_images)
 
     shap_numpy = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in shap_values]
     test_numpy = np.swapaxes(np.swapaxes(test_images.numpy(), 1, -1), 1, 2)
 
+    # plot the feature attributions
+    shap.image_plot(shap_numpy, -test_numpy)
