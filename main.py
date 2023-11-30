@@ -22,6 +22,6 @@ for i in num_epochs:
     print(f'training with {i} epochs')
     train(i, model, loaders, optimizer, loss_func, device, print_progress=True)
     test(model, loaders, loss_func, device)
-    explain(model, loaders, device)
+    explain(model, loaders, i, device)
 
     
